@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invitación Mágica - Yoselin</title>
+    <title>Invitación Mágica</title>
     <style>
+        /* ESTILO GENERAL */
         body {
             background-color: #1a1a1a;
             margin: 0;
@@ -16,59 +17,94 @@
             font-family: 'Georgia', serif;
         }
 
+        /* EFECTO DE LUZ (DESTELLO) */
+        #flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            opacity: 0;
+            z-index: 10;
+            pointer-events: none;
+        }
+
         #contenedor {
             position: relative;
             width: 90%;
-            max-width: 500px;
+            max-width: 450px;
             text-align: center;
         }
 
-        /* ESTILO DEL SOBRE */
-        #sobre {
-            width: 100%;
+        /* VISTA DEL SOBRE */
+        #seccion-sobre {
             cursor: pointer;
-            transition: transform 0.8s, opacity 0.8s;
-            z-index: 2;
+            transition: all 0.5s ease-in;
         }
 
-        /* ESTILO DE LA CARTA (OCULTA AL INICIO) */
-        #carta {
+        #sobre-img {
             width: 100%;
-            display: none;
-            opacity: 0;
-            transition: opacity 1s;
-            transform: scale(0.9);
-            z-index: 1;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            border-radius: 10px;
         }
 
         .instruccion {
-            color: white;
-            margin-top: 10px;
+            color: #d4af37;
+            margin-top: 15px;
             font-size: 14px;
             letter-spacing: 2px;
             animation: parpadeo 2s infinite;
         }
 
-        @keyframes parpadeo {
-            0% { opacity: 0.3; }
-            50% { opacity: 1; }
-            100% { opacity: 0.3; }
+        /* VISTA DE LA CARTA (OCULTA) */
+        #seccion-carta {
+            display: none;
+            opacity: 0;
+            transform: scale(0.6);
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .boton-ws {
-            display: none;
-            background: #740001;
-            color: white;
-            padding: 15px 25px;
-            text-decoration: none;
+        #invitacion-img {
+            width: 100%;
+            border: 2px solid #d4af37;
+            box-shadow: 0 0 50px rgba(212, 175, 55, 0.4);
             border-radius: 5px;
-            margin-top: 20px;
+        }
+
+        /* BOTÓN DE WHATSAPP */
+        .boton-ws {
+            display: inline-block;
+            background: #740001; /* Rojo Gryffindor */
+            color: white;
+            padding: 16px 28px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-top: 25px;
             font-weight: bold;
             border: 2px solid #d4af37;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            font-size: 16px;
+        }
+
+        /* ANIMACIONES */
+        .luz-activa { animation: destello 0.7s ease-out; }
+
+        @keyframes destello {
+            0% { opacity: 0; }
+            50% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes parpadeo {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
         }
     </style>
 </head>
 <body>
+
+    <div id="flash"></div>
 
     <audio id="musica" loop>
         <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=5792d472-8877-49f9-968b-57774e1d702d" type="audio/mpeg">
@@ -76,12 +112,12 @@
 
     <div id="contenedor">
         <div id="seccion-sobre" onclick="abrirCarta()">
-            <img src="sobre.jpg" id="sobre" alt="Sobre de Hogwarts">
-            <p class="instruccion">TOCA EL SELLO PARA ABRIR</p>
+            <img src="sobre.jpg" id="sobre-img" alt="Sobre con sello">
+            <p class="instruccion">PULSA EL SELLO PARA ABRIR</p>
         </div>
 
         <div id="seccion-carta">
-            <img src="invitacion.png" id="carta" alt="Invitación Yoselin">
+            <img src="invitacion.png" id="invitacion-img" alt="Invitación">
             <br>
             <a id="linkWs" href="#" class="boton-ws">CONFIRMAR ASISTENCIA ⚡</a>
         </div>
@@ -89,36 +125,36 @@
 
     <script>
         function abrirCarta() {
-            // Reproducir música
-            document.getElementById('musica').play();
+            // Iniciar música
+            const audio = document.getElementById('musica');
+            audio.play().catch(() => console.log("Esperando clic"));
 
-            // Animación de salida del sobre
-            const sobre = document.getElementById('sobre');
-            const instruccion = document.querySelector('.instruccion');
-            sobre.style.transform = "translateY(-100px) scale(1.2)";
-            sobre.style.opacity = "0";
-            instruccion.style.display = "none";
+            // Efecto de Luz Blanca
+            const flash = document.getElementById('flash');
+            flash.classList.add('luz-activa');
+
+            // Cambio de secciones
+            const sobre = document.getElementById('seccion-sobre');
+            const carta = document.getElementById('seccion-carta');
 
             setTimeout(() => {
-                document.getElementById('seccion-sobre').style.display = "none";
-                
-                // Mostrar la carta de Yoselin
-                const carta = document.getElementById('carta');
-                const boton = document.querySelector('.boton-ws');
+                sobre.style.display = "none";
                 carta.style.display = "block";
-                boton.style.display = "inline-block";
                 
                 setTimeout(() => {
                     carta.style.opacity = "1";
                     carta.style.transform = "scale(1)";
-                }, 100);
-            }, 800);
+                }, 50);
+            }, 350); // El cambio ocurre durante el destello
         }
 
-        // CONFIGURACIÓN DE WHATSAPP
-        const miNumero = "573XXXXXXXXX"; // PON TU NÚMERO AQUÍ
-        const mensaje = "¡Hola Yoselin! Confirmo mi asistencia a tu cumple. ¡Gracias por la invitación! 🧙‍♂️✨";
-        document.getElementById('linkWs').href = "https://api.whatsapp.com/send?phone=" + miNumero + "&text=" + encodeURIComponent(mensaje);
+        // CONFIGURACIÓN FINAL WHATSAPP MÉXICO
+        const miNumero = "527351817365"; 
+        const mensaje = "¡Hola! Confirmo mi asistencia al cumpleaños. ¡Ahí estaré! 🧙‍♂️✨";
+        
+        // Link directo wa.me (el más confiable)
+        document.getElementById('linkWs').href = "https://wa.me/" + miNumero + "?text=" + encodeURIComponent(mensaje);
     </script>
+
 </body>
 </html>
