@@ -107,7 +107,7 @@
     <div id="flash"></div>
 
     <audio id="musica" loop>
-        <source src="https://www.soundboard.com/handler/DownLoadTrack.ashx?cliptoken=5792d472-8877-49f9-968b-57774e1d702d" type="audio/mpeg">
+        <source src="audioh.mp3" type="audio/mpeg">
     </audio>
 
     <div id="contenedor">
@@ -125,15 +125,15 @@
 
     <script>
         function abrirCarta() {
-            // Iniciar música
+            // 1. Iniciar la música
             const audio = document.getElementById('musica');
-            audio.play().catch(() => console.log("Esperando clic"));
+            audio.play().catch(error => console.log("Reproducción bloqueada hasta interactuar:", error));
 
-            // Efecto de Luz Blanca
+            // 2. Efecto de Luz Blanca
             const flash = document.getElementById('flash');
             flash.classList.add('luz-activa');
 
-            // Cambio de secciones
+            // 3. Cambio de secciones con retraso para el efecto visual
             const sobre = document.getElementById('seccion-sobre');
             const carta = document.getElementById('seccion-carta');
 
@@ -145,14 +145,13 @@
                     carta.style.opacity = "1";
                     carta.style.transform = "scale(1)";
                 }, 50);
-            }, 350); // El cambio ocurre durante el destello
+            }, 350); 
         }
 
-        // CONFIGURACIÓN FINAL WHATSAPP MÉXICO
+        // CONFIGURACIÓN WHATSAPP
         const miNumero = "527351817365"; 
         const mensaje = "¡Hola! Confirmo mi asistencia al cumpleaños. ¡Ahí estaré! 🧙‍♂️✨";
         
-        // Link directo wa.me (el más confiable)
         document.getElementById('linkWs').href = "https://wa.me/" + miNumero + "?text=" + encodeURIComponent(mensaje);
     </script>
 
